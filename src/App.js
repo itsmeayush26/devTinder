@@ -8,8 +8,16 @@ const app = express();
 // });
 
 
+// query vs params
+
+// app.get("/user", (req,res) => {
+//     console.log (req.query);
+//     res.send ({firstName:"Ayush ", lastName:"Singh"})
+// });
+
 //this will only handle get call to /user -> lecture 4 HTTPS topic 
-app.get("/user", (req,res) => {
+app.get("/user/:userId/:name/:password", (req,res) => {       //<-params
+    console.log (req.params);
     res.send ({firstName:"Ayush ", lastName:"Singh"})
 });
 
@@ -51,4 +59,3 @@ app.use("/test",(req,res) =>{
 app.listen(3000, () =>{
     console.log("server is successfully listenning on port 3000...");
 });
-
