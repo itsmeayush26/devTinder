@@ -1,12 +1,164 @@
 const express= require('express');
 const app = express();
 
+const {adminAuth, userAuth} = require("./middlewares/auth");
+
+//handle Auth Middleware for only Get requests GET,POST
+
+
+app.use ("/admin", adminAuth);
+//app.use ("/user", userAuth);
+/*
+app.use("/admin",  // || app.all("/admin")   see differences btw use and all
+(req,res,next) => {
+    console.log ("admin auth is getting checked !!")
+    const token ="xyz";
+    const isAdminAuthorized = token ==="xyz";
+    if  (!isAdminAuthorized){
+        res.status(401).send("unauthorized request")
+       
+    }
+    else {
+        next();
+    }
+});
+
+*/
+
+//in post we do no req middlewares ->dummy auth middleware 
+app.post("/user/login",(req,res)=>{
+    res.send ("User logged in successfully");
+});
+
+
+app.get("/admin/getAllData", (req,res) =>{
+   
+        res.send ("All Data Sent ");
+});
+
+app.get("/admin/deleteUser", (req,res) =>{
+   
+        res.send ("Deleted a user");
+});
+ // here ,,,,admin auth will not be checked it will only check for something starting with /admin 
+app.get("/User", userAuth, (req,res) =>{
+   
+    res.send ("user data sent ");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+//above we have make the code look simple the same below code 
+/*
+app.get("/admin/getAllData", (req,res) =>{
+    // logic of checking if the request is authorized
+    const token ="xyzabcdjfhuifgh";
+    const isAdminAuthorized = token ==="xyz";
+    if  (isAdminAuthorized){
+        res.send ("All Data Sent ");
+       
+    }
+    else {
+        res.status(401).send("unauthorized request");
+    }
+
+});
+
+app.get("/admin/deleteUser", (req,res) =>{
+    // logic of checking if the request is authorized
+    const token ="xyzabcdjfhuifgh";
+    const isAdminAuthorized = token ==="xyz";
+    if  (isAdminAuthorized){
+        res.send ("Deleted a user");
+       
+    }
+    else {
+        res.status(401).send("unauthorized request");
+    }
+
+});
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+//midlewares 
+//GET /users => Its checks all the app.xxx("matching route ") functions 
+
+app.use("/",(req,res,next) => {
+    //res.send("handling /route");
+    next(),
+
+});
+
+ app.get(
+    "/user",  
+    (req,res,next) =>{
+    console.log("handling /user route");
+    next();
+    },
+    (req,res) =>{
+        res.send("2nd route handler");
+        // next();
+    }, 
+    (req,res,) =>{
+    res.send("2nd route handler");
+              
+}),
+
+*/
+
+
+
+
+
+
+/*app.get(
+"/user",   (req,res,next) =>{
+  console.log("handling the route user !!");    next();
+  },    
+  (req,res,) =>{
+  console.log("handling the route user2 !!");
+     res.send("response2!!")
+}),
+*/
+
+
+
+
+
+
+
+
+
+
+
 
 //lecture  ->>05
 //one route can have multiple route handler lecture->>05
 
 // first one response!! will be output as js is single threaded language 
-app.use("/user",(req,res,next) =>{
+/*app.use("/user",(req,res,next) =>{
     console.log("handling the route user!!");
     // res.send("response!!");
     next(); ///  ->> it calls the next req,response
@@ -56,6 +208,8 @@ res.send("2nd response!!");
 //     console.log (req.query);
 //     res.send ({firstName:"Ayush ", lastName:"Singh"})
 // });
+
+*/
 
 /*//this will only handle get call to /user -> lecture 4 HTTPS topic 
 app.get("/user/:userId/:name/:password", (req,res) => {       //<-params
