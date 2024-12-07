@@ -1,6 +1,32 @@
 const express= require('express');
 const app = express();
 
+
+
+
+
+app.get("/getUserData", (req,res) =>{
+   try{
+    //logic of db calls and get user data 
+
+   throw new error("dhskfh")
+    res.send ("user Data Sent ");
+   }catch(err){
+    res.status (500).send("some error contact support team")
+
+  }
+});
+
+//handling error using -> middlewares 
+app.use("/",(err,req,res,next,)=>{  ///order is imp "err" should be in front as always 
+    if (err){
+        //log your error 
+        res.status(500).send("something went wrong ");
+    }
+
+});
+
+/*
 const {adminAuth, userAuth} = require("./middlewares/auth");
 
 //handle Auth Middleware for only Get requests GET,POST
@@ -24,7 +50,7 @@ app.use("/admin",  // || app.all("/admin")   see differences btw use and all
 });
 
 */
-
+/*
 //in post we do no req middlewares ->dummy auth middleware 
 app.post("/user/login",(req,res)=>{
     res.send ("User logged in successfully");
@@ -46,7 +72,7 @@ app.get("/User", userAuth, (req,res) =>{
     res.send ("user data sent ");
 });
 
-
+*/
 
 
 
