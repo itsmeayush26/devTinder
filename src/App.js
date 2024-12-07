@@ -2,28 +2,39 @@ const express= require('express');
 const connectDB=require("./config/database");
 const User =require ("./models/user");
 
-
-
 const app = express();
 
-app.post("/signup",async (req,res)=> {
-    //creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
-    const user =new User ({  //(userobj);
-    // const  userobj = {
-        firstName: "shasii ",
-        lastName: "singh",
-        emaiId: "suku.singhayush@gmail.com",
-        password: "sukuh@260320",
-        //_id: "675499abf18ed870e555aec899", you can add id of your choice but dont do it its a bad practice let mongodb make unique ids 
+app.use(express.json());
 
-});
-try{
-await user.save(); //saves in the db
-res.send("user added successfully");
-}catch(err){
-    res.status(400).send("error saving the user :"+ err .message);
-}
-});
+app.post("/signup",async (req,res)=> {
+ // console.log (req.body);
+
+ const user = new User(req.body);
+
+ try{
+    await user.save(); //saves in the db
+    res.send("user added successfully");
+    }catch(err){
+        res.status(400).send("error saving the user :"+ err .message);
+    }
+    });
+    //creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
+    //const user = new User(req.body);  //({  //(userobj);
+    // // const  userobj = {
+    //     firstName: "shasii ",
+    //     lastName: "singh",
+    //     emaiId: "suku.singhayush@gmail.com",
+    //     password: "sukuh@260320",
+    //     //_id: "675499abf18ed870e555aec899", you can add id of your choice but dont do it its a bad practice let mongodb make unique ids 
+
+// });
+// try{
+// await user.save(); //saves in the db
+// res.send("user added successfully");
+// }catch(err){
+//     res.status(400).send("error saving the user :"+ err .message);
+// }
+// });
  
 connectDB().then(() =>{
     console.log ("database is connected successfully")
@@ -32,7 +43,7 @@ connectDB().then(() =>{
 .catch(err=>{
     console.log("database cannot be connected ")
 
-});
+ });
 
 
 /*
