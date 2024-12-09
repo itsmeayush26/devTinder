@@ -1,5 +1,5 @@
 const  mongoose =require("mongoose");
-
+const validator =require("validator");
 const userSchema = new mongoose.Schema({
     firstName:  {
         type: String,
@@ -16,11 +16,22 @@ const userSchema = new mongoose.Schema({
         lowercase:true,
         unique:true,//for non redundency of emailss
         trim:true,
+        validate(value){
+            if (validator.isEmail(value)){
+                throw new Error("invalid email address"+value);
+            }
+        },
     
     },
     password:  {
         type : String,
         required: true,
+        validate(value){
+            if (validator.isStrongPassword(value)){
+                throw new Error("enter a strong password:"+value);
+            }
+        },
+    
     }, 
     age :  {
         type : Number,
@@ -37,7 +48,14 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl :  {
         type : String,
-        default:"https://th.bing.com/th/id/OIP.16mKSaqxjNor68qMZti0kgHaHT?rs=1&pid=ImgDetMain"
+        default:"https://th.bing.com/th/id/OIP.16mKSaqxjNor68qMZti0kgHaHT?rs=1&pid=ImgDetMain",
+        validate(value){
+            if (validator.isURL(value)){
+                throw new Error("invalid email url"+value);
+            }
+        },
+    
+    
     },
     about :  {
         type : String,
