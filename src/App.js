@@ -8,17 +8,17 @@ app.use(express.json());
 
 
 app.post("/signup",async (req,res)=>{  
- // });
-   app.get("/user",async(req,res)=>{ 
-    const userEmail = req.body.emailId;
-try{
-    console.log (userEmail);
-    const user =  await User.findOne({emailId: userEmail}); 
-    if (!user){
-        res.status(400).send("user not found");
-    }else {
-        res.send (user);  
-    }
+ });
+                       app.get("/user",async(req,res)=>{ 
+                        const userEmail = req.body.emailId;
+                    try{
+                        console.log (userEmail);
+                        const user =  await User.findOne({emailId: userEmail}); 
+                        if (!user){
+                            res.status(400).send("user not found");
+                        }else {
+                            res.send (user);  
+                        }
 //    const user =  await User.find({emailId: userEmail});  // <---filter to find the person with  particular data 
 //     if (users.length === 0){
 //         res.status(400).send("user not found");
@@ -59,13 +59,29 @@ app.delete ("/user",async(req,res)=>{
 
 });
 
+
+///----->>>>data sanitization <<<<<--------
 //update data of the user
 app.patch("/user",async(req,res)=>{
-    const userId =req.body.userId;
+    const userId =req.params?.userId;
+    // const userId =req.body.userId;
     const data =req.body;
     try{
+        const ALLOWED_UPDATES =[
+            "userId","photoUrl","about","skills","age","gender"
+        ];
+        const isUpdateALLOWED =Object.keys(data).every((k)
+    );
+    if (!isupdateALLOWED){
+        throw new Error("update not allowed");
+    }
+    if(data?.skills.length>10){
+        throw new Error("skills cannot be more than 10");
+    }
+
         const user =await User.findByIdAndUpdate({_id: userId},data,{
-            returnDocument:"after",
+         returnDocument:"after",
+         runValidators:true,
         });
         console.log(user);
         res.send("user update successfully");
@@ -81,29 +97,29 @@ app.patch("/user",async(req,res)=>{
 
 
 // app.post("/signup",async (req,res)=>{
-// // console.log (req.body);});
+// console.log (req.body);//});
 
     
 
 
-   // creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
-    const user = new User(req.body);  //({   //(userobj);
-//     //const userobj = {
-//         firstName: "shasii ",
-//         lastName: "singh",
-//         emailId: "suku.singhayush@gmail.com",
-//         password: "sukuh@260320",
+//    // creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
+//     //const user = new User(req.body);  //({   //(userobj);
+//     const userobj = {
+//         firstName: "shaii ",
+//         lastName: "sinvdvhgh",
+//         emailId: "suku.singhayusgh@gmail.com",
+//         password: "sukugh@260320",
 //         //_id: "675499abf18ed870e555aec899", you can add id of your choice but dont do it its a bad practice let mongodb make unique ids 
 
+// }); 
+
+// try {
+// //await user.save(); //saves in the db
+// res.send("user added successfully");
+// }catch(err){
+//     res.status(400).send("error saving the user :"+ err .message);
 // }
-// ); 
-try {
-//await user.save(); //saves in the db
-res.send("user added successfully");
-}catch(err){
-    res.status(400).send("error saving the user :"+ err .message);
-}
-});
+// });
 
 
 connectDB().then(() =>{
