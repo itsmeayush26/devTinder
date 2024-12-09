@@ -1,41 +1,82 @@
 const express= require('express');
-const connectDB=require("./config/database");
+const connectDB =require("./config/database");
 const User =require ("./models/user");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); 
 
-app.post("/signup",async (req,res)=> {
- // console.log (req.body);
 
- const user = new User(req.body);
 
- try{
-    await user.save(); //saves in the db
-    res.send("user added successfully");
-    }catch(err){
-        res.status(400).send("error saving the user :"+ err .message);
+
+app.post("/signup",async (req,res)=>{
+   });
+
+//Get user by email
+   app.get("/user",async(req,res)=>{ 
+    const userEmail = req.body.emailId;
+try{
+    console.log (userEmail);
+    const user =  await User.findOne({emailId: userEmail}); 
+    if (!user){
+        res.status(400).send("user not found");
+    }else {
+        res.send (user); 
     }
-    });
-    //creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
-    //const user = new User(req.body);  //({  //(userobj);
-    // // const  userobj = {
-    //     firstName: "shasii ",
-    //     lastName: "singh",
-    //     emaiId: "suku.singhayush@gmail.com",
-    //     password: "sukuh@260320",
-    //     //_id: "675499abf18ed870e555aec899", you can add id of your choice but dont do it its a bad practice let mongodb make unique ids 
+//    const user =  await User.find({emailId: userEmail});  // <---filter to find the person with  particular data 
+//     if (users.length === 0){
+//         res.status(400).send("user not found");
 
-// });
+//     }else{
+//     res.send (users);
+//     }
+}catch(err){ 
+    res.status(400).send("something went wrong!!")
+}
+   });  
+
+//Feed API -GET/feed -get all the users from db 
+app.get("/feed",async(req,res)=>{
+    try{
+        const users =await User.find({});
+        res.send(users);
+    }
+catch(err){
+    res.status(400).send("something went wrong!!")
+}
+
+});
+
+
+
+
+
+
+// app.post("/signup",async (req,res)=>{
+// console.log (req.body);});
+
+    
+
+
+//    // creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
+//     const user = new User(req.body);  //({  //(userobj);
+//     // const  userobj = {
+//         firstName: "shasii ",
+//         lastName : "singh",
+//         emailId  :"suku.singhayush@gmail.com",
+//         password : "sukuh@260320",
+//         //_id: "675499abf18ed870e555aec899", you can add id of your choice but dont do it its a bad practice let mongodb make unique ids 
+
+//  });
 // try{
 // await user.save(); //saves in the db
 // res.send("user added successfully");
 // }catch(err){
 //     res.status(400).send("error saving the user :"+ err .message);
 // }
-// });
- 
+// //});
+
+
 connectDB().then(() =>{
     console.log ("database is connected successfully")
 
@@ -43,7 +84,9 @@ connectDB().then(() =>{
 .catch(err=>{
     console.log("database cannot be connected ")
 
- });
+});
+ 
+
 
 
 /*
