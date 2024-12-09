@@ -36,14 +36,46 @@ try{
    });  
 
 //Feed API -GET/feed -get all the users from db 
+// app.get("/feed",async(req,res)=>{
+//     try{
+//         const users =await User.find({});
+//         res.send(users);
+//     }
+// catch(err){
+//     res.status(400).send("something went wrong!!")
+// }
+
+// });
 app.get("/feed",async(req,res)=>{
+});
+//delete by user Id
+app.delete ("/user",async(req,res)=>{
+
+    const userId =req.body.userId;
     try{
-        const users =await User.find({});
-        res.send(users);
+         //const user = await User.findByIdAndDelete({_id: userId});    //youn can pass like this also 
+         const user = await User.findByIdAndDelete(userId);
+        res.send("user deleted succesfully");
     }
-catch(err){
-    res.status(400).send("something went wrong!!")
-}
+    catch(err){
+            res.status(400).send("something went wrong!!")
+        }
+
+});
+
+//update data of the user
+app.patch("/user",async(req,res)=>{
+    const userId =req.body.userId;
+    const data =req.body;
+    try{
+        const user =await User.findByIdAndUpdate({_id: userId},data,{
+            returnDocument:"after",
+        });
+        console.log(user);
+        res.send("user update successfully");
+    }catch(err){
+        res.status(400).send("something went wrong!!") 
+    }
 
 });
 
