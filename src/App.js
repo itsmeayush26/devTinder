@@ -7,12 +7,8 @@ const app = express();
 app.use(express.json()); 
 
 
-
-
-app.post("/signup",async (req,res)=>{
-   });
-
-//Get user by email
+app.post("/signup",async (req,res)=>{  
+ // });
    app.get("/user",async(req,res)=>{ 
     const userEmail = req.body.emailId;
 try{
@@ -21,7 +17,7 @@ try{
     if (!user){
         res.status(400).send("user not found");
     }else {
-        res.send (user); 
+        res.send (user);  
     }
 //    const user =  await User.find({emailId: userEmail});  // <---filter to find the person with  particular data 
 //     if (users.length === 0){
@@ -85,36 +81,37 @@ app.patch("/user",async(req,res)=>{
 
 
 // app.post("/signup",async (req,res)=>{
-// console.log (req.body);});
+// // console.log (req.body);});
 
     
 
 
-//    // creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
-//     const user = new User(req.body);  //({  //(userobj);
-//     // const  userobj = {
+   // creating a new instance of the user models        ......otherwise copy paste the above code agin agian for every user 
+    const user = new User(req.body);  //({   //(userobj);
+//     //const userobj = {
 //         firstName: "shasii ",
-//         lastName : "singh",
-//         emailId  :"suku.singhayush@gmail.com",
-//         password : "sukuh@260320",
+//         lastName: "singh",
+//         emailId: "suku.singhayush@gmail.com",
+//         password: "sukuh@260320",
 //         //_id: "675499abf18ed870e555aec899", you can add id of your choice but dont do it its a bad practice let mongodb make unique ids 
 
-//  });
-// try{
-// await user.save(); //saves in the db
-// res.send("user added successfully");
-// }catch(err){
-//     res.status(400).send("error saving the user :"+ err .message);
 // }
-// //});
+// ); 
+try {
+//await user.save(); //saves in the db
+res.send("user added successfully");
+}catch(err){
+    res.status(400).send("error saving the user :"+ err .message);
+}
+});
 
 
 connectDB().then(() =>{
     console.log ("database is connected successfully")
-
+ 
 })
 .catch(err=>{
-    console.log("database cannot be connected ")
+    console.log("database cannot be connected ") 
 
 });
  
