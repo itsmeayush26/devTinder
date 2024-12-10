@@ -1,24 +1,78 @@
 const express= require('express');
 const connectDB =require("./config/database");
 const User =require ("./models/user");
+const  {ValidateSignUpData } = require("./utils/validation");
+const bcrypt =require("bcrypt");
 
 const app = express();
 
 app.use(express.json()); 
 
 
-app.post("/signup",async (req,res)=>{  
+app.post("/signup",async (req,res)=>{ 
+    try {
+    //validation of data 
+    ValidateSignUpData(req);
+
+    const { firstName, lastName, emailId, password } =req.body;
+    // encrypt the password ---->using bcrypt
+    const passwordHash =await bcrypt.hash(password,10);
+    console.log (passwordHash);
+
+    // creating a new instance of the user models 
+    const user =new User({
+        firstName,
+        lastName, 
+        emailId, 
+        password: passwordHash,
+    });
+    
+    
+        await user.save(); //saves in the db
+        res.send("user added successfully");
+        }catch(err){
+            res.status(400).send("ERROR:"+ err .message);
+        }
  });
-                       app.get("/user",async(req,res)=>{ 
-                        const userEmail = req.body.emailId;
-                    try{
-                        console.log (userEmail);
-                        const user =  await User.findOne({emailId: userEmail}); 
-                        if (!user){
-                            res.status(400).send("user not found");
-                        }else {
-                            res.send (user);  
-                        }
+
+
+
+ app.post("/login",async (req,res)=>{ 
+    try {
+         const { emailId, password } =req.body;
+
+         const user =await User.findOne({emailId :emailId});
+         if (!user){
+            throw new Error ("EmailId is not present in db ");
+
+         }
+         const isPasswordValid =await bcrypt.compare(password,user.password);
+         if (isPasswordValid){
+            res.send("login successfully");
+         }else {
+            throw new Error("Password not correct")
+        }
+
+}catch(err){
+    res.status(400).send("ERROR:"+ err .message);
+}
+});
+
+
+
+
+
+
+app.get("/user",async(req,res)=>{ 
+const userEmail = req.body.emailId;
+ try{
+    console.log (userEmail);
+    const user =  await User.findOne({emailId: userEmail}); 
+    if (!user){
+     res.status(400).send("user not found");
+ }else {
+     res.send (user);  
+}
 //    const user =  await User.find({emailId: userEmail});  // <---filter to find the person with  particular data 
 //     if (users.length === 0){
 //         res.status(400).send("user not found");

@@ -31,11 +31,11 @@ const userSchema = new mongoose.Schema({
                 throw new Error("enter a strong password:"+value);
             }
         },
-    
+     
     }, 
     age :  {
         type : Number,
-        min: 18,
+        min: 18, 
     },
     gender :   {
         type : String,
